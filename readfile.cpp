@@ -177,7 +177,7 @@ void readfile(const char* filename)
             // camera center
             center = vec3(values[3], values[4], values[5]);
             // normalize up vector
-            upinit = normalize(vec3(values[6], values[7], values[8]));
+            upinit = Transform::upvector(vec3(values[6], values[7], values[8]), -eyeinit);
             // camera lensing focal leng.
             fovy = values[9];
           }
@@ -224,10 +224,7 @@ void readfile(const char* filename)
           validinput = readvals(s,3,values); 
           if (validinput) {
 
-            // YOUR CODE FOR HW 2 HERE.  
-            // Think about how the transformation stack is affected
-            // You might want to use helper functions on top of file. 
-            // Also keep in mind what order your matrix is!
+            rightmultiply(Transform::translate(values[0], values[1], values[2]), transfstack);
             
           }
         }
@@ -235,24 +232,29 @@ void readfile(const char* filename)
           validinput = readvals(s,3,values); 
           if (validinput) {
 
-            // YOUR CODE FOR HW 2 HERE.  
-            // Think about how the transformation stack is affected
-            // You might want to use helper functions on top of file.  
-            // Also keep in mind what order your matrix is!
+            rightmultiply(Transform::scale(values[0], values[1], values[2]), transfstack);
 
           }
         }
         else if (cmd == "rotate") {
           validinput = readvals(s,4,values); 
-          if (validinput) {
+          if (validinput) 
+          {
+            vec3 axis{values[0],values[1], values[2]};
 
-            // YOUR CODE FOR HW 2 HERE. 
-            // values[0..2] are the axis, values[3] is the angle.  
-            // You may want to normalize the axis (or in Transform::rotate)
-            // See how the stack is affected, as above.  
-            // Note that rotate returns a mat3. 
-            // Also keep in mind what order your matrix is!
+            glm::mat4 homogeneousMatrix = glm::mat4(1.0f); // Initialize as identity matrix
 
+            // Copy the values from the 3x3 matrix to the top-left 3x3 submatrix of the 4x4 matrix
+            mat3 rot_matrix = Transform::rotate(values[3], axis);
+            for (int row = 0; row < 3; ++row)
+            {
+                for (int col = 0; col < 3; ++col)
+                {
+                    homogeneousMatrix[row][col] = rot_matrix[row][col];
+                }
+            }
+
+            rightmultiply(homogeneousMatrix, transfstack);
           }
         }
 
