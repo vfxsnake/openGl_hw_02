@@ -172,17 +172,13 @@ void readfile(const char* filename)
           validinput = readvals(s,10,values); // 10 values eye cen up fov
           if (validinput) {
 
-            // YOUR CODE FOR HW 2 HERE
-            // Use all of values[0...9]
-            // You may need to use the upvector fn in Transform.cpp
-            // to set up correctly. 
-            // Set eyeinit upinit center fovy in variables.h 
-            // camera 0 -2 2 0 0 0 0 1 1 30.0
-            
             // camera position
             eyeinit = vec3(values[0], values[1], values[2]);
+            // camera center
             center = vec3(values[3], values[4], values[5]);
+            // normalize up vector
             upinit = normalize(vec3(values[6], values[7], values[8]));
+            // camera lensing focal leng.
             fovy = values[9];
           }
         }
