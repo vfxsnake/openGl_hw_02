@@ -105,12 +105,19 @@ void readfile(const char* filename)
             cerr << "Reached Maximum Number of Lights " << numused << " Will ignore further lights\n";
           } else {
             validinput = readvals(s, 8, values); // Position/color for lts.
-            if (validinput) {
+            if (validinput) 
+            {
+              // pasing position values in homogeneous coordinates.
+              lightposn[numused * 4] = values[0];
+              lightposn[(numused * 4) + 1] = values[1];
+              lightposn[(numused * 4) + 2] = values[2];
+              lightposn[(numused * 4) + 3] = values[3];
 
-              // YOUR CODE FOR HW 2 HERE. 
-              // Note that values[0...7] shows the read in values 
-              // Make use of lightposn[] and lightcolor[] arrays in variables.h
-              // Those arrays can then be used in display too.  
+              // passing rgba colors
+              lightcolor[numused * 4] = values[4];
+              lightcolor[(numused * 4) + 1] = values[5];
+              lightcolor[(numused * 4) + 2] = values[6];
+              lightcolor[(numused * 4) + 3] = values[7];
 
               ++numused; 
             }
